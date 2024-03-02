@@ -7,7 +7,8 @@ async fn main() {
 
     let birders = Birders::new(credentials);
     let sub_regions = birders
-        .sub_region_list("CA", &RegionType::Subnational1)
+        .sub_region_list("CA", RegionType::Subnational1)
+        .get()
         .await
         .map_err(|e| e.to_string())
         .unwrap();

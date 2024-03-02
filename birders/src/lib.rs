@@ -1,10 +1,12 @@
+pub mod api;
 mod credentials;
 pub mod errors;
 pub mod models;
 
+use api::regions::SubRegionListHandler;
 pub use credentials::Credentials;
 use errors::BirderError;
-use models::regions::{RegionType, SlimRegion};
+use models::regions::RegionType;
 use reqwest::{header, ClientBuilder};
 
 pub struct Birders {
@@ -12,14 +14,15 @@ pub struct Birders {
 }
 
 const BASE_URL: &str = "https://api.ebird.org/v2";
-
+const API_TOKEN_HEADER: &str = "x-ebirdapitoken";
 /// Constructors
 impl Birders {
     pub fn new(credentials: Credentials) -> Self {
         let mut headers = header::HeaderMap::new();
-        let mut token_header = header::HeaderValue::from_str(&credentials.api_token).unwrap();
+        let mut token_header = header::HeaderValue::from_str(&credentials.api_token)
+            .expect("Invalid API token passed for header");
         token_header.set_sensitive(true);
-        headers.insert("x-ebirdapitoken", token_header);
+        headers.insert(API_TOKEN_HEADER, token_header);
         let client = ClientBuilder::new()
             .default_headers(headers)
             .build()
@@ -30,12 +33,22 @@ impl Birders {
 }
 
 impl Birders {
-    pub async fn sub_region_list(
+    pub fn sub_region_list(
         &self,
         region_name: &str,
-        sub_region_type: &RegionType,
-    ) -> Result<Vec<SlimRegion>, BirderError> {
-        let url = format!("{BASE_URL}/ref/region/list/{sub_region_type}/{region_name}");
+        sub_region_type: RegionType,
+    ) -> SubRegionListHandler {
+        SubRegionListHandler::new(self, sub_region_type, region_name)
+    }
+}
+
+/// Do the requests
+impl Birders {
+    pub async fn get<T: for<'a> serde::Deserialize<'a>>(
+        &self,
+        path: &str,
+    ) -> Result<T, BirderError> {
+        let url = format!("{BASE_URL}{path}");
 
         let response = self
             .client
@@ -52,6 +65,3 @@ impl Birders {
             })
     }
 }
-
-/// Do the requests
-impl Birders {}
