@@ -3,7 +3,7 @@ mod credentials;
 pub mod errors;
 pub mod models;
 
-use api::regions::SubRegionListHandler;
+use api::regions::{RegionInfoHandler, SubRegionListHandler};
 pub use credentials::Credentials;
 use errors::BirderError;
 use models::regions::RegionType;
@@ -35,10 +35,14 @@ impl Birders {
 impl Birders {
     pub fn sub_region_list(
         &self,
-        region_name: &str,
+        region_code: &str,
         sub_region_type: RegionType,
     ) -> SubRegionListHandler {
-        SubRegionListHandler::new(self, sub_region_type, region_name)
+        SubRegionListHandler::new(self, sub_region_type, region_code)
+    }
+
+    pub fn region_info(&self, region_code: &str) -> RegionInfoHandler {
+        RegionInfoHandler::new(self, region_code)
     }
 }
 

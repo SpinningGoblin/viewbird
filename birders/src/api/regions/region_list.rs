@@ -7,15 +7,15 @@ use crate::{
 pub struct SubRegionListHandler<'birder> {
     birder: &'birder Birders,
     sub_region_type: RegionType,
-    region_name: String,
+    region_code: String,
 }
 
 impl<'birder> SubRegionListHandler<'birder> {
-    pub fn new(birder: &'birder Birders, sub_region_type: RegionType, region_name: &str) -> Self {
+    pub fn new(birder: &'birder Birders, sub_region_type: RegionType, region_code: &str) -> Self {
         Self {
             birder,
             sub_region_type,
-            region_name: region_name.to_string(),
+            region_code: region_code.to_string(),
         }
     }
 }
@@ -25,7 +25,7 @@ impl<'birder> SubRegionListHandler<'birder> {
         self.birder
             .get(&format!(
                 "/ref/region/list/{}/{}",
-                self.sub_region_type, self.region_name
+                self.sub_region_type, self.region_code
             ))
             .await
     }

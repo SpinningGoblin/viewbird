@@ -10,8 +10,12 @@ async fn main() {
         .sub_region_list("CA", RegionType::Subnational1)
         .get()
         .await
-        .map_err(|e| e.to_string())
         .unwrap();
-    let serialized = serde_json::to_string(&sub_regions).unwrap();
+    let region_info = birders
+        .region_info(&sub_regions.get(1).unwrap().code)
+        .get()
+        .await
+        .unwrap();
+    let serialized = serde_json::to_string(&region_info).unwrap();
     println!("{serialized}");
 }
