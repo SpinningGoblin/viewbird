@@ -3,7 +3,10 @@ mod credentials;
 pub mod errors;
 pub mod models;
 
-use api::regions::{RegionInfoHandler, SubRegionListHandler};
+use api::{
+    hotspots::{HotspotInfoHandler, HotspotsInRegionHandler, NearbyHotspotsHandler, NearbyParams},
+    regions::{RegionInfoHandler, SubRegionListHandler},
+};
 pub use credentials::Credentials;
 use errors::BirderError;
 use models::regions::RegionType;
@@ -11,24 +14,40 @@ use reqwest::{header, ClientBuilder};
 
 pub struct Birders {
     client: reqwest::Client,
+    debug_printing: bool,
 }
 
 const BASE_URL: &str = "https://api.ebird.org/v2";
 const API_TOKEN_HEADER: &str = "x-ebirdapitoken";
+
 /// Constructors
 impl Birders {
-    pub fn new(credentials: Credentials) -> Self {
+    fn create_client(credentials: Credentials) -> reqwest::Client {
         let mut headers = header::HeaderMap::new();
         let mut token_header = header::HeaderValue::from_str(&credentials.api_token)
             .expect("Invalid API token passed for header");
         token_header.set_sensitive(true);
         headers.insert(API_TOKEN_HEADER, token_header);
-        let client = ClientBuilder::new()
+        ClientBuilder::new()
             .default_headers(headers)
             .build()
-            .unwrap();
+            .unwrap()
+    }
 
-        Self { client }
+    pub fn new(credentials: Credentials) -> Self {
+        let client = Self::create_client(credentials);
+        Self {
+            client,
+            debug_printing: false,
+        }
+    }
+
+    pub fn new_with_debug_printing(credentials: Credentials) -> Self {
+        let client = Self::create_client(credentials);
+        Self {
+            client,
+            debug_printing: true,
+        }
     }
 }
 
@@ -43,6 +62,27 @@ impl Birders {
 
     pub fn region_info(&self, region_code: &str) -> RegionInfoHandler {
         RegionInfoHandler::new(self, region_code)
+    }
+
+    pub fn hotspots_in_region(
+        &self,
+        region_code: &str,
+        back: Option<u8>,
+    ) -> HotspotsInRegionHandler {
+        HotspotsInRegionHandler::new(self, region_code, back)
+    }
+
+    pub fn hotspot_info(&self, loc_id: &str) -> HotspotInfoHandler {
+        HotspotInfoHandler::new(self, loc_id)
+    }
+
+    pub fn nearby_hotspots(
+        &self,
+        longitude: f64,
+        latitude: f64,
+        params: Option<NearbyParams>,
+    ) -> NearbyHotspotsHandler {
+        NearbyHotspotsHandler::new(self, longitude, latitude, params)
     }
 }
 
@@ -61,11 +101,12 @@ impl Birders {
             .await
             .map_err(BirderError::EBirdRequestError)?;
 
-        response
-            .json()
-            .await
-            .map_err(|e| BirderError::UnknownError {
-                message: e.to_string(),
-            })
+        let text = response.text().await.unwrap();
+        if self.debug_printing {
+            println!("{}", text);
+        }
+        serde_json::from_str(&text).map_err(|e| BirderError::UnknownError {
+            message: e.to_string(),
+        })
     }
 }
