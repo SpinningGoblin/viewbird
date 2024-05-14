@@ -1,3 +1,4 @@
+pub mod api;
 mod hotspot;
 mod hotspot_geo;
 

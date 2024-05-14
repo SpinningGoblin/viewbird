@@ -1,4 +1,4 @@
-use crate::{errors::BirderError, models::hotspots::HotspotGeo, Birders};
+use crate::{errors::BirderError, hotspots::HotspotGeo, Birders};
 
 pub struct HotspotsInRegionHandler<'birder> {
     birder: &'birder Birders,

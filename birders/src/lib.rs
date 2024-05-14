@@ -1,15 +1,14 @@
-pub mod api;
 mod credentials;
 pub mod errors;
+pub mod hotspots;
 mod location;
-pub mod models;
 pub mod regions;
 
-use api::hotspots::{
-    HotspotInfoHandler, HotspotsInRegionHandler, NearbyHotspotsHandler, NearbyParams,
-};
 pub use credentials::Credentials;
 use errors::BirderError;
+use hotspots::api::{
+    HotspotInfoHandler, HotspotsInRegionHandler, NearbyHotspotsHandler, NearbyParams,
+};
 pub use location::Location;
 use regions::{
     api::{RegionInfoHandler, SubRegionListHandler},

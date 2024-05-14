@@ -1,4 +1,4 @@
-use crate::{errors::BirderError, models::hotspots::HotspotGeo, Birders, Location};
+use crate::{errors::BirderError, hotspots::HotspotGeo, Birders, Location};
 
 /// Optional parameters for nearby hotspots.
 pub struct NearbyParams {
