@@ -1,6 +1,4 @@
-use birders::{
-    api::hotspots::NearbyParams, models::regions::RegionType, Birders, Credentials, Location,
-};
+use birders::{api::hotspots::NearbyParams, regions::RegionType, Birders, Credentials, Location};
 
 #[tokio::main]
 async fn main() {

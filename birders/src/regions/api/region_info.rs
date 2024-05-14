@@ -1,4 +1,4 @@
-use crate::{errors::BirderError, models::regions::Region, Birders};
+use crate::{errors::BirderError, regions::Region, Birders};
 
 pub struct RegionInfoHandler<'birder> {
     birder: &'birder Birders,

@@ -1,6 +1,6 @@
 use crate::{
     errors::BirderError,
-    models::regions::{RegionType, SlimRegion},
+    regions::{RegionType, SlimRegion},
     Birders,
 };
 

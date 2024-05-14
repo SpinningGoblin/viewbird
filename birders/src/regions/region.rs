@@ -18,7 +18,8 @@ pub struct Region {
 
 #[cfg(test)]
 mod tests {
-    use crate::models::regions::{Bounds, RegionParent, RegionType};
+
+    use crate::regions::{Bounds, RegionParent, RegionType};
 
     use super::Region;
 

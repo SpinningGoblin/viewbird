@@ -3,15 +3,18 @@ mod credentials;
 pub mod errors;
 mod location;
 pub mod models;
+pub mod regions;
 
-use api::{
-    hotspots::{HotspotInfoHandler, HotspotsInRegionHandler, NearbyHotspotsHandler, NearbyParams},
-    regions::{RegionInfoHandler, SubRegionListHandler},
+use api::hotspots::{
+    HotspotInfoHandler, HotspotsInRegionHandler, NearbyHotspotsHandler, NearbyParams,
 };
 pub use credentials::Credentials;
 use errors::BirderError;
 pub use location::Location;
-use models::regions::RegionType;
+use regions::{
+    api::{RegionInfoHandler, SubRegionListHandler},
+    RegionType,
+};
 use reqwest::{header, ClientBuilder};
 
 pub struct Birders {
