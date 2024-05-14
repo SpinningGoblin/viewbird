@@ -1,3 +1,4 @@
+use reqwest::StatusCode;
 use thiserror::Error;
 
 /// All of the errors that could happen while using the birders crate.
@@ -7,4 +8,6 @@ pub enum BirderError {
     UnknownError { message: String },
     #[error("Error during request to ebird API")]
     EBirdRequestError(#[from] reqwest::Error),
+    #[error("Error response from ebird API")]
+    EBirdErrorResponse { body: String, status: StatusCode },
 }

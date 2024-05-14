@@ -57,4 +57,6 @@ async fn main() {
 
     let serialized = serde_json::to_string(&nearby_hotspots).unwrap();
     println!("{serialized}");
+
+    birders.adjacent_regions("CA-BC").get().await.unwrap();
 }

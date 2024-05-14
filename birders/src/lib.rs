@@ -11,7 +11,7 @@ use hotspots::api::{
 };
 pub use location::Location;
 use regions::{
-    api::{RegionInfoHandler, SubRegionListHandler},
+    api::{AdjacentRegionHandler, RegionInfoHandler, SubRegionListHandler},
     RegionType,
 };
 use reqwest::{header, ClientBuilder};
@@ -56,6 +56,10 @@ impl Birders {
 }
 
 impl Birders {
+    pub fn adjacent_regions(&self, region_code: &str) -> AdjacentRegionHandler {
+        AdjacentRegionHandler::new(self, region_code)
+    }
+
     pub fn sub_region_list(
         &self,
         region_code: &str,
@@ -104,7 +108,15 @@ impl Birders {
             .await
             .map_err(BirderError::EBirdRequestError)?;
 
+        let status_code = response.status();
         let text = response.text().await.unwrap();
+        if !status_code.is_success() {
+            return Err(BirderError::EBirdErrorResponse {
+                body: text,
+                status: status_code,
+            });
+        }
+
         if self.debug_printing {
             println!("{}", text);
         }
