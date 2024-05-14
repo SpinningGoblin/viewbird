@@ -1,4 +1,4 @@
-use crate::{errors::BirderError, models::hotspots::HotspotGeo, Birders};
+use crate::{errors::BirderError, models::hotspots::HotspotGeo, Birders, Location};
 
 /// Optional parameters for nearby hotspots.
 pub struct NearbyParams {
@@ -29,22 +29,15 @@ impl NearbyParams {
 
 pub struct NearbyHotspotsHandler<'birder> {
     birder: &'birder Birders,
-    latitude: f64,
-    longitude: f64,
+    location: Location,
     params: Option<NearbyParams>,
 }
 
 impl<'birder> NearbyHotspotsHandler<'birder> {
-    pub fn new(
-        birder: &'birder Birders,
-        longitude: f64,
-        latitude: f64,
-        params: Option<NearbyParams>,
-    ) -> Self {
+    pub fn new(birder: &'birder Birders, location: Location, params: Option<NearbyParams>) -> Self {
         Self {
             birder,
-            longitude,
-            latitude,
+            location,
             params,
         }
     }
@@ -54,7 +47,7 @@ impl<'birder> NearbyHotspotsHandler<'birder> {
     pub async fn get(&self) -> Result<Vec<HotspotGeo>, BirderError> {
         let url = format!(
             "/ref/hotspot/geo?fmt=json&lat={}&lng={}",
-            self.latitude, self.longitude
+            self.location.latitude, self.location.longitude
         );
 
         let full_url = match &self.params {

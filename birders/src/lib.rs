@@ -1,6 +1,7 @@
 pub mod api;
 mod credentials;
 pub mod errors;
+mod location;
 pub mod models;
 
 use api::{
@@ -9,6 +10,7 @@ use api::{
 };
 pub use credentials::Credentials;
 use errors::BirderError;
+pub use location::Location;
 use models::regions::RegionType;
 use reqwest::{header, ClientBuilder};
 
@@ -78,11 +80,10 @@ impl Birders {
 
     pub fn nearby_hotspots(
         &self,
-        longitude: f64,
-        latitude: f64,
+        location: Location,
         params: Option<NearbyParams>,
     ) -> NearbyHotspotsHandler {
-        NearbyHotspotsHandler::new(self, longitude, latitude, params)
+        NearbyHotspotsHandler::new(self, location, params)
     }
 }
 
