@@ -2,6 +2,7 @@ use std::fmt::Display;
 
 use serde::{Deserialize, Serialize};
 
+/// Detailing the type of region, with country being the largest.
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 pub enum RegionType {
     #[serde(alias = "country")]

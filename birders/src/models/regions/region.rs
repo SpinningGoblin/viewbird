@@ -2,6 +2,8 @@ use serde::{Deserialize, Serialize};
 
 use super::{Bounds, RegionParent, RegionType};
 
+/// A geographic region such as a country like Canada, or a
+/// province like British Columbia.
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 pub struct Region {
     pub bounds: Bounds,

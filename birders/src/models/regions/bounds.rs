@@ -1,13 +1,18 @@
 use serde::{Deserialize, Serialize};
 
+/// A bounding box around a region.
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 pub struct Bounds {
+    /// The minimum x coordinate, or min longitude.
     #[serde(alias = "minX")]
     pub min_x: f64,
+    /// The maximum x coordinate, or max longitude.
     #[serde(alias = "maxX")]
     pub max_x: f64,
+    /// The minimum y coordinate, or min latitude.
     #[serde(alias = "minY")]
     pub min_y: f64,
+    /// The maximum y coordinate, or max latitude
     #[serde(alias = "maxY")]
     pub max_y: f64,
 }
