@@ -2,6 +2,7 @@ mod credentials;
 pub mod errors;
 pub mod hotspots;
 mod location;
+pub mod observations;
 pub mod regions;
 
 pub use credentials::Credentials;
@@ -10,6 +11,10 @@ use hotspots::api::{
     HotspotInfoHandler, HotspotsInRegionHandler, NearbyHotspotsHandler, NearbyParams,
 };
 pub use location::Location;
+use observations::api::{
+    RecentInRegionForSpeciesHandler, RecentInRegionHandler, RecentInRegionParams,
+    RecentNotableInRegionHandler,
+};
 use regions::{
     api::{AdjacentRegionHandler, RegionInfoHandler, SubRegionListHandler},
     RegionType,
@@ -90,6 +95,31 @@ impl Birders {
         params: Option<NearbyParams>,
     ) -> NearbyHotspotsHandler {
         NearbyHotspotsHandler::new(self, location, params)
+    }
+
+    pub fn recent_observations_in_region(
+        &self,
+        region_code: &str,
+        params: Option<RecentInRegionParams>,
+    ) -> RecentInRegionHandler {
+        RecentInRegionHandler::new(self, region_code, params)
+    }
+
+    pub fn recent_notable_observations_in_region(
+        &self,
+        region_code: &str,
+        params: Option<RecentInRegionParams>,
+    ) -> RecentNotableInRegionHandler {
+        RecentNotableInRegionHandler::new(self, region_code, params)
+    }
+
+    pub fn recent_observations_for_species_in_region(
+        &self,
+        region_code: &str,
+        species_code: &str,
+        params: Option<RecentInRegionParams>,
+    ) -> RecentInRegionForSpeciesHandler {
+        RecentInRegionForSpeciesHandler::new(self, region_code, species_code, params)
     }
 }
 

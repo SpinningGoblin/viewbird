@@ -23,6 +23,7 @@ pub struct Hotspot {
     pub is_hotspot: bool,
     #[serde(alias = "locName")]
     pub loc_name: String,
+    // Yes, hotspots have both latitude, longitude, lat and lng.
     pub lat: f64,
     pub lng: f64,
     #[serde(alias = "hierarchicalName")]

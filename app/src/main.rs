@@ -1,4 +1,7 @@
-use birders::{hotspots::api::NearbyParams, regions::RegionType, Birders, Credentials, Location};
+use birders::{
+    hotspots::api::NearbyParams, observations::api::RecentInRegionParams, regions::RegionType,
+    Birders, Credentials, Location,
+};
 
 #[tokio::main]
 async fn main() {
@@ -13,7 +16,7 @@ async fn main() {
         Birders::new(credentials)
     };
     let sub_regions = birders
-        .sub_region_list("CA-BC", RegionType::Subnational2)
+        .sub_region_list("CA-AB", RegionType::Subnational2)
         .get()
         .await
         .unwrap();
@@ -58,5 +61,22 @@ async fn main() {
     let serialized = serde_json::to_string(&nearby_hotspots).unwrap();
     println!("{serialized}");
 
-    birders.adjacent_regions("CA-BC").get().await.unwrap();
+    birders.adjacent_regions("CA-AB").get().await.unwrap();
+
+    let recent_observations = birders
+        .recent_notable_observations_in_region(
+            "CA-AB",
+            Some(RecentInRegionParams {
+                back: Some(10),
+                max_results: Some(2),
+                r: Some(vec!["CA-AB-SI".to_string()]),
+                ..RecentInRegionParams::default()
+            }),
+        )
+        .get()
+        .await
+        .unwrap();
+
+    let serialized = serde_json::to_string(&recent_observations).unwrap();
+    println!("{serialized}");
 }
