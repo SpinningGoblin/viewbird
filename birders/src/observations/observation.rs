@@ -15,6 +15,7 @@ pub struct Observation {
     #[serde(alias = "obsDt")]
     pub obs_dt: String,
     #[serde(alias = "howMany")]
+    #[serde(default)]
     pub how_many: u64,
     #[serde(alias = "lat")]
     pub latitude: f64,

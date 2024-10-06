@@ -91,7 +91,7 @@ impl Birders {
 
     pub fn nearby_hotspots(
         &self,
-        location: Location,
+        location: &Location,
         params: Option<NearbyParams>,
     ) -> NearbyHotspotsHandler {
         NearbyHotspotsHandler::new(self, location, params)

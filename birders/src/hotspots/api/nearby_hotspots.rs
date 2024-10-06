@@ -34,10 +34,14 @@ pub struct NearbyHotspotsHandler<'birder> {
 }
 
 impl<'birder> NearbyHotspotsHandler<'birder> {
-    pub fn new(birder: &'birder Birders, location: Location, params: Option<NearbyParams>) -> Self {
+    pub fn new(
+        birder: &'birder Birders,
+        location: &Location,
+        params: Option<NearbyParams>,
+    ) -> Self {
         Self {
             birder,
-            location,
+            location: location.clone(),
             params,
         }
     }

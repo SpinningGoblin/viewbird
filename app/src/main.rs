@@ -43,12 +43,14 @@ async fn main() {
     let serialized = serde_json::to_string(&hotspot).unwrap();
     println!("{serialized}");
 
+    let location = Location {
+        longitude: -113.96707,
+        latitude: 50.71641,
+    };
+
     let nearby_hotspots = birders
         .nearby_hotspots(
-            Location {
-                longitude: -123.72295129044818,
-                latitude: 48.387562021244186,
-            },
+            &location,
             Some(NearbyParams {
                 back: Some(3),
                 dist: None,
@@ -78,5 +80,13 @@ async fn main() {
         .unwrap();
 
     let serialized = serde_json::to_string(&recent_observations).unwrap();
+    println!("{serialized}");
+
+    let recent_nearby_obs = birders
+        .recent_nearby_observations(&location, None)
+        .get()
+        .await
+        .unwrap();
+    let serialized = serde_json::to_string(&recent_nearby_obs).unwrap();
     println!("{serialized}");
 }
