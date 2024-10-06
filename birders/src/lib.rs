@@ -12,16 +12,17 @@ use hotspots::api::{
 };
 pub use location::Location;
 use observations::api::{
-    NearSpeciesParams, NearestOfSpeciesHandler, RecentInRegionForSpeciesHandler,
-    RecentInRegionHandler, RecentInRegionParams, RecentNearbyHandler, RecentNearbyNotableHandler,
-    RecentNearbyNotableParams, RecentNearbyParams, RecentNearbySpeciesHandler,
-    RecentNotableInRegionHandler,
+    HistoricOnDateHandler, HistoricOnDateParams, NearSpeciesParams, NearestOfSpeciesHandler,
+    RecentInRegionForSpeciesHandler, RecentInRegionHandler, RecentInRegionParams,
+    RecentNearbyHandler, RecentNearbyNotableHandler, RecentNearbyNotableParams, RecentNearbyParams,
+    RecentNearbySpeciesHandler, RecentNotableInRegionHandler,
 };
 use regions::{
     api::{AdjacentRegionHandler, RegionInfoHandler, SubRegionListHandler},
     RegionType,
 };
 use reqwest::{header, ClientBuilder};
+use time::Date;
 
 pub struct Birders {
     client: reqwest::Client,
@@ -156,6 +157,15 @@ impl Birders {
         params: Option<RecentNearbyNotableParams>,
     ) -> RecentNearbyNotableHandler {
         RecentNearbyNotableHandler::new(self, location, params)
+    }
+
+    pub fn historic_observations_on_date(
+        &self,
+        region_code: &str,
+        date: &Date,
+        params: Option<HistoricOnDateParams>,
+    ) -> HistoricOnDateHandler {
+        HistoricOnDateHandler::new(self, region_code, date, params)
     }
 }
 

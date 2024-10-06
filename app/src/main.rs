@@ -1,12 +1,13 @@
 use birders::{
     hotspots::api::NearbyParams,
     observations::api::{
-        DetailType, NearSpeciesParams, RecentInRegionParams, RecentNearbyNotableParams,
-        RecentNearbyParams,
+        DetailType, HistoricOnDateParams, NearSpeciesParams, RecentInRegionParams,
+        RecentNearbyNotableParams, RecentNearbyParams,
     },
     regions::RegionType,
     Birders, Credentials, Location,
 };
+use time::{Date, Month};
 
 #[tokio::main]
 async fn main() {
@@ -144,5 +145,23 @@ async fn main() {
     println!("recent_nearby_notable");
 
     let serialized = serde_json::to_string(&recent_nearby_notable).unwrap();
+    println!("{serialized}");
+
+    let historic_obs = birders
+        .historic_observations_on_date(
+            "CA-AB-SI",
+            &Date::from_calendar_date(2024, Month::August, 15).unwrap(),
+            Some(HistoricOnDateParams {
+                max_results: Some(1),
+                ..HistoricOnDateParams::default()
+            }),
+        )
+        .get()
+        .await
+        .unwrap();
+
+    println!("recent_nearby_notable");
+
+    let serialized = serde_json::to_string(&historic_obs).unwrap();
     println!("{serialized}");
 }
