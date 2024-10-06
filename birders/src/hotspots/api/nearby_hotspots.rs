@@ -41,7 +41,7 @@ impl<'birder> NearbyHotspotsHandler<'birder> {
     ) -> Self {
         Self {
             birder,
-            location: location.clone(),
+            location: *location,
             params,
         }
     }
