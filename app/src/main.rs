@@ -1,6 +1,9 @@
 use birders::{
     hotspots::api::NearbyParams,
-    observations::api::{NearSpeciesParams, RecentInRegionParams},
+    observations::api::{
+        DetailType, NearSpeciesParams, RecentInRegionParams, RecentNearbyNotableParams,
+        RecentNearbyParams,
+    },
     regions::RegionType,
     Birders, Credentials, Location,
 };
@@ -85,7 +88,13 @@ async fn main() {
     println!("{serialized}");
 
     let recent_nearby_obs = birders
-        .recent_nearby_observations(&location, None)
+        .recent_nearby_observations(
+            &location,
+            Some(RecentNearbyParams {
+                max_results: Some(1),
+                ..RecentNearbyParams::default()
+            }),
+        )
         .get()
         .await
         .unwrap();
@@ -117,5 +126,23 @@ async fn main() {
     println!("nearest_of_species");
 
     let serialized = serde_json::to_string(&nearest_of_species).unwrap();
+    println!("{serialized}");
+
+    let recent_nearby_notable = birders
+        .recent_nearby_notable_observations(
+            &location,
+            Some(RecentNearbyNotableParams {
+                detail: Some(DetailType::Full),
+                max_results: Some(1),
+                ..RecentNearbyNotableParams::default()
+            }),
+        )
+        .get()
+        .await
+        .unwrap();
+
+    println!("recent_nearby_notable");
+
+    let serialized = serde_json::to_string(&recent_nearby_notable).unwrap();
     println!("{serialized}");
 }
