@@ -22,7 +22,7 @@ impl<'birder> HistoricOnDateHandler<'birder> {
             birder,
             params,
             region_code: region_code.to_string(),
-            date: date.clone(),
+            date: *date,
         }
     }
 }
