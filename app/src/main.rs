@@ -89,4 +89,13 @@ async fn main() {
         .unwrap();
     let serialized = serde_json::to_string(&recent_nearby_obs).unwrap();
     println!("{serialized}");
+
+    let species_code = "gryjay"; // Just picking out a random one
+    let recent_nearby_species_obs = birders
+        .recent_nearby_species(species_code, &location, None)
+        .get()
+        .await
+        .unwrap();
+    let serialized = serde_json::to_string(&recent_nearby_species_obs).unwrap();
+    println!("{serialized}");
 }

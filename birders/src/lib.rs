@@ -13,7 +13,8 @@ use hotspots::api::{
 pub use location::Location;
 use observations::api::{
     RecentInRegionForSpeciesHandler, RecentInRegionHandler, RecentInRegionParams,
-    RecentNearbyHandler, RecentNearbyParams, RecentNotableInRegionHandler,
+    RecentNearbyHandler, RecentNearbyParams, RecentNearbySpeciesHandler, RecentNearbySpeciesParams,
+    RecentNotableInRegionHandler,
 };
 use regions::{
     api::{AdjacentRegionHandler, RegionInfoHandler, SubRegionListHandler},
@@ -129,6 +130,15 @@ impl Birders {
     ) -> RecentNearbyHandler {
         RecentNearbyHandler::new(self, location, params)
     }
+
+    pub fn recent_nearby_species(
+        &self,
+        species_code: &str,
+        location: &Location,
+        params: Option<RecentNearbySpeciesParams>,
+    ) -> RecentNearbySpeciesHandler {
+        RecentNearbySpeciesHandler::new(self, species_code, location, params)
+    }
 }
 
 /// Do the requests
@@ -138,6 +148,10 @@ impl Birders {
         path: &str,
     ) -> Result<T, BirderError> {
         let url = format!("{BASE_URL}{path}");
+
+        if self.debug_printing {
+            println!("{url}");
+        }
 
         let response = self
             .client
@@ -156,7 +170,7 @@ impl Birders {
         }
 
         if self.debug_printing {
-            println!("{}", text);
+            println!("{text}");
         }
         serde_json::from_str(&text).map_err(|e| BirderError::UnknownError {
             message: e.to_string(),
