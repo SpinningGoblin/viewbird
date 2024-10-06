@@ -13,7 +13,7 @@ use hotspots::api::{
 pub use location::Location;
 use observations::api::{
     RecentInRegionForSpeciesHandler, RecentInRegionHandler, RecentInRegionParams,
-    RecentNotableInRegionHandler,
+    RecentNearbyHandler, RecentNearbyParams, RecentNotableInRegionHandler,
 };
 use regions::{
     api::{AdjacentRegionHandler, RegionInfoHandler, SubRegionListHandler},
@@ -120,6 +120,14 @@ impl Birders {
         params: Option<RecentInRegionParams>,
     ) -> RecentInRegionForSpeciesHandler {
         RecentInRegionForSpeciesHandler::new(self, region_code, species_code, params)
+    }
+
+    pub fn recent_nearby_observations(
+        &self,
+        location: &Location,
+        params: Option<RecentNearbyParams>,
+    ) -> RecentNearbyHandler {
+        RecentNearbyHandler::new(self, location, params)
     }
 }
 
