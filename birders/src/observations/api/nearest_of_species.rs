@@ -2,7 +2,7 @@ use crate::{errors::BirderError, observations::Observation, Birders, Location};
 
 use super::NearSpeciesParams;
 
-pub struct RecentNearbySpeciesHandler<'birder> {
+pub struct NearestOfSpeciesHandler<'birder> {
     birder: &'birder Birders,
     latitude: f64,
     longitude: f64,
@@ -10,7 +10,7 @@ pub struct RecentNearbySpeciesHandler<'birder> {
     params: Option<NearSpeciesParams>,
 }
 
-impl<'birder> RecentNearbySpeciesHandler<'birder> {
+impl<'birder> NearestOfSpeciesHandler<'birder> {
     pub fn new(
         birder: &'birder Birders,
         species_code: &str,
@@ -27,10 +27,10 @@ impl<'birder> RecentNearbySpeciesHandler<'birder> {
     }
 }
 
-impl<'birder> RecentNearbySpeciesHandler<'birder> {
+impl<'birder> NearestOfSpeciesHandler<'birder> {
     pub async fn get(&self) -> Result<Vec<Observation>, BirderError> {
         let url = format!(
-            "/data/obs/geo/recent/{}?lat={}&lng={}",
+            "/data/nearest/geo/recent/{}?lat={}&lng={}",
             self.species_code, self.latitude, self.longitude
         );
 

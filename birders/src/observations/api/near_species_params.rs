@@ -1,6 +1,6 @@
 /// Optional parameters for recent observations in a region.
 #[derive(Default)]
-pub struct RecentNearbySpeciesParams {
+pub struct NearSpeciesParams {
     /// How many days back to look up data for. Max is 30.
     /// Will default to None if not provided.
     pub back: Option<u8>,
@@ -20,7 +20,7 @@ pub struct RecentNearbySpeciesParams {
     pub dist: Option<u8>,
 }
 
-impl RecentNearbySpeciesParams {
+impl NearSpeciesParams {
     pub fn to_url(&self) -> Vec<String> {
         let mut url_params = Vec::new();
 

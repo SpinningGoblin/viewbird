@@ -1,5 +1,7 @@
 use birders::{
-    hotspots::api::NearbyParams, observations::api::RecentInRegionParams, regions::RegionType,
+    hotspots::api::NearbyParams,
+    observations::api::{NearSpeciesParams, RecentInRegionParams},
+    regions::RegionType,
     Birders, Credentials, Location,
 };
 
@@ -92,10 +94,28 @@ async fn main() {
 
     let species_code = "gryjay"; // Just picking out a random one
     let recent_nearby_species_obs = birders
-        .recent_nearby_species(species_code, &location, None)
+        .recent_nearby_species_observations(species_code, &location, None)
         .get()
         .await
         .unwrap();
     let serialized = serde_json::to_string(&recent_nearby_species_obs).unwrap();
+    println!("{serialized}");
+
+    let nearest_of_species = birders
+        .nearest_species_observations(
+            species_code,
+            &location,
+            Some(NearSpeciesParams {
+                max_results: Some(1),
+                ..NearSpeciesParams::default()
+            }),
+        )
+        .get()
+        .await
+        .unwrap();
+
+    println!("nearest_of_species");
+
+    let serialized = serde_json::to_string(&nearest_of_species).unwrap();
     println!("{serialized}");
 }
