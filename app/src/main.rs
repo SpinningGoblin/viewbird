@@ -164,4 +164,11 @@ async fn main() {
 
     let serialized = serde_json::to_string(&historic_obs).unwrap();
     println!("{serialized}");
+
+    let species_in_region = birders.species_in_region("CA-AB-SI").get().await.unwrap();
+
+    println!("species_in_region");
+
+    let serialized = serde_json::to_string(&species_in_region).unwrap();
+    println!("{serialized}");
 }

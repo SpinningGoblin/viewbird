@@ -4,6 +4,7 @@ pub mod hotspots;
 mod location;
 pub mod observations;
 pub mod regions;
+pub mod species;
 
 pub use credentials::Credentials;
 use errors::BirderError;
@@ -22,6 +23,7 @@ use regions::{
     RegionType,
 };
 use reqwest::{header, ClientBuilder};
+use species::api::SpeciesInRegionHandler;
 use time::Date;
 
 pub struct Birders {
@@ -166,6 +168,11 @@ impl Birders {
         params: Option<HistoricOnDateParams>,
     ) -> HistoricOnDateHandler {
         HistoricOnDateHandler::new(self, region_code, date, params)
+    }
+
+    /// Retrieve a list of the species codes for a region.
+    pub fn species_in_region(&self, region_code: &str) -> SpeciesInRegionHandler {
+        SpeciesInRegionHandler::new(self, region_code)
     }
 }
 
