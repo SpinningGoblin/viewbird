@@ -5,6 +5,7 @@ mod location;
 pub mod observations;
 pub mod regions;
 pub mod species;
+pub mod taxonomies;
 
 pub use credentials::Credentials;
 use errors::BirderError;
@@ -24,6 +25,7 @@ use regions::{
 };
 use reqwest::{header, ClientBuilder};
 use species::api::SpeciesInRegionHandler;
+use taxonomies::api::{EbirdTaxonomyHandler, EbirdTaxonomyParams};
 use time::Date;
 
 pub struct Birders {
@@ -173,6 +175,10 @@ impl Birders {
     /// Retrieve a list of the species codes for a region.
     pub fn species_in_region(&self, region_code: &str) -> SpeciesInRegionHandler {
         SpeciesInRegionHandler::new(self, region_code)
+    }
+
+    pub fn ebird_taxonomy(&self, params: Option<EbirdTaxonomyParams>) -> EbirdTaxonomyHandler {
+        EbirdTaxonomyHandler::new(self, params)
     }
 }
 
