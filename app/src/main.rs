@@ -27,14 +27,14 @@ async fn main() {
         .await
         .unwrap();
 
-    println!("have subregion list");
-    let region_info = birders
-        .region_info(&sub_regions.get(1).unwrap().code)
-        .get()
-        .await
+    println!("{:?}", &sub_regions);
+
+    let region_info = sub_regions
+        .iter()
+        .find(|sub_region| sub_region.code == "CA-AB-SI")
         .unwrap();
 
-    println!("have region info");
+    println!("have region info {:?}", &region_info);
 
     let hotspots_in_region = birders
         .hotspots_in_region(&region_info.code, None)
@@ -50,8 +50,8 @@ async fn main() {
     println!("{serialized}");
 
     let location = Location {
-        longitude: -113.96707,
-        latitude: 50.71641,
+        longitude: -113.98281000,
+        latitude: 50.72885000,
     };
 
     let nearby_hotspots = birders
@@ -150,7 +150,7 @@ async fn main() {
     let historic_obs = birders
         .historic_observations_on_date(
             "CA-AB-SI",
-            &Date::from_calendar_date(2024, Month::August, 15).unwrap(),
+            &Date::from_calendar_date(2025, Month::April, 30).unwrap(),
             Some(HistoricOnDateParams {
                 max_results: Some(1),
                 ..HistoricOnDateParams::default()
